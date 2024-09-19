@@ -119,3 +119,50 @@ Download complete. File saved as file2.jpg
 
 - Make sure that both the server and client machines are on the same network or adjust the IP address accordingly.
 - The project supports downloading and uploading files of any type (text, binary, etc.).
+
+---
+
+### Assumptions Made During Implementation:
+
+1. **Fixed Directories**:
+   - **Server's file directory**: It was assumed that the server will always have a `shared_files/` directory, which contains files to serve to the clients. The server program does not dynamically create this directory; the user must manually set it up before running the server.
+   
+2. **File Availability**:
+   - The client program assumes that the files listed by the server are always available for download. It doesn't handle the case where a file might be deleted from the server directory between listing and the client requesting the download.
+   
+3. **Localhost Testing**:
+   - The programs assume that the server and client will most commonly be tested on the same machine using the localhost (`127.0.0.1`) IP address. However, it should work on different machines if they are on the same network.
+   
+4. **Fixed Ports**:
+   - The server always runs on port `2236` and the client binds to port `1496`. No dynamic port allocation is performed.
+   
+5. **Minimum Number of Files**:
+   - The server assumes that the directory will contain at least 50 files (each 10MB or larger) for testing purposes. However, the program will work with fewer files as well.
+
+6. **Chunk Size**:
+   - The file transfer uses a fixed chunk size of 1024 bytes for both upload and download processes.
+
+7. **File Permissions**:
+   - It was assumed that the server will have the necessary write permissions for the directory to save uploaded files and the necessary read permissions to serve files.
+
+8. **TCP Connection**:
+   - The program assumes that the network is stable and reliable enough to maintain a TCP connection between the server and client for the duration of file transfer. The client does support resuming interrupted downloads, but it assumes that unintentional interruptions would be network-related.
+
+### Challenges Encountered During Implementation:
+   
+1. **Resuming Downloads**:
+   - Implementing the functionality for resuming interrupted downloads required the client to send its current file size (in case of partial downloads) and the server to adjust its file read pointer accordingly. This involved careful use of `lseek()` on the server to jump to the correct file position and `open()` flags on the client to ensure it resumed appending to the existing file.
+   
+2. **Managing Large Files**:
+   - Since the server is required to serve files of at least 10MB, the file handling and chunk-based transfer system had to ensure efficient memory usage. Reading and writing files in fixed-size chunks (1024 bytes) helped manage memory constraints, but handling larger files (e.g., 1GB) was a challenge in terms of ensuring that the client could handle a long-running download process without running into memory issues.
+   
+3. **File Uploads**:
+   - Adding file upload functionality was an optional feature but required careful coordination between the client and server, especially when ensuring that the server saved uploaded files correctly with the proper file names and sizes.
+   
+4. **Progress Display**:
+   - Implementing a real-time progress bar for downloads was somewhat tricky. The client had to calculate the download progress as a percentage and update the user interface without overwhelming the terminal with too many print statements. This required balancing between frequent updates and maintaining smooth performance.
+   
+5. **Logging System**:
+   - Ensuring that the server correctly logged each client’s activity (IP, port, file requested, success/failure) was another challenge. Since multiple processes were accessing the log file concurrently, there was potential for race conditions. This was mitigated by ensuring that each process handled its own logging and closed the file properly after use.
+
+By overcoming these challenges, the program was able to meet the assignment requirements and function reliably in a multi-client, file-exchange scenario.
