@@ -1,4 +1,4 @@
-## README: Torrent File Exchange System - C Socket Programming
+# README: Torrent File Exchange System - C Socket Programming
 
 ### Project Overview
 
