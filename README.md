@@ -69,8 +69,8 @@ gcc cli2236.c -o client
 
 Both the server and client programs handle common errors, such as:
 - Connection issues.
-- File-related errors (e.g., file not found, permission denied).
-- Incomplete downloads or uploads.
+- File-related errors (e.g., file not found).
+- Incomplete downloads.
 
 If an error occurs, an appropriate error message will be displayed in the terminal.
 
@@ -106,6 +106,9 @@ Enter the file number to download: 2
 Downloading file2.jpg...
 Progress: 1%
 Progress: 2%
+.
+.
+.
 Progress: 100%
 Download complete. File saved as file2.jpg
 ```
@@ -116,7 +119,3 @@ Download complete. File saved as file2.jpg
 
 - Make sure that both the server and client machines are on the same network or adjust the IP address accordingly.
 - The project supports downloading and uploading files of any type (text, binary, etc.).
-
----
-
-This README file should be sufficient to guide anyone through compiling, running, and interacting with your server and client programs. You can now include this as `README.txt` or `README.md` in your project directory. Let me know if you need any further modifications!
